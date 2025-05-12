@@ -3,7 +3,6 @@ import reeds_shepp as rs
 import utils
 import draw
 import math
-import random as rd
 
 
 

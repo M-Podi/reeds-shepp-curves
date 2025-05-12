@@ -1,4 +1,3 @@
-import turtle
 from utils import *
 import reeds_shepp as rs
 import random as rd

@@ -1,19 +1,4 @@
-"""
-Implementation of the optimal path formulas given in the following paper:
 
-OPTIMAL PATHS FOR A CAR THAT GOES BOTH FORWARDS AND BACKWARDS
-J. A. REEDS AND L. A. SHEPP
-
-notes: there are some typos in the formulas given in the paper;
-some formulas have been adapted (cf http://msl.cs.uiuc.edu/~lavalle/cs326a/rs.c)
-
-Each of the 12 functions (each representing 4 of the 48 possible words)
-have 3 arguments x, y and phi, the goal position and angle (in degrees) of the
-object given it starts at position (0, 0) and angle 0, and returns the
-corresponding path (if it exists) as a list of PathElements (or an empty list).
-
-(actually there are less than 48 possible words but this code is not optimized)
-"""
 
 from utils import *
 import math
