@@ -1,71 +1,75 @@
-# Reeds-Shepp Curves
+# Optimized Reeds-Shepp Trajectories
 
-A simple Python implementation of the Reeds-Shepp curves formulas provided in the following paper:
+This project implements optimal path planning for non-holonomic vehicles using Reeds-Shepp curves. It extends the original implementation with trajectory optimization capabilities by solving two key challenges:
 
-Reeds, J. A.; Shepp, L. A. Optimal paths for a car that goes both forwards and backwards. Pacific J. Math. 145 (1990), no. 2, 367-393.
-https://projecteuclid.org/euclid.pjm/1102645450
+1. **Waypoint Order Optimization**: Determines the optimal sequence of waypoints to minimize total path length using the Traveling Salesman Problem (TSP) approach.
+2. **Turning Radius Visualization**: Illustrates resulting trajectories for various values of the minimum turning radius.
 
-### Requirements
+## Features
 
-You will need the `turtle` module to run the demo and draw the generated paths, but you can also use the functions provided in `reeds_shepp.py` without drawing anything.
+- **TSP Optimization**: Automatically finds the optimal waypoint order to minimize the total path length
+  - Exact solution for small problems (< 10 waypoints)
+  - Greedy nearest-neighbor approach for larger problems
+- **Multi-Radius Visualization**: Simultaneously visualizes trajectories with different turning radii
+- **Waypoint File Support**: Loads waypoints from a simple CSV-style text file
+- **Interactive Animation**: Visualizes the path generation process with Turtle graphics
 
-I have only tested the code under Python 3.7.1. It uses the `enum` module so it will not run on a version below 3.4, but one could easily adapt the code to make it work with Python 2 by replacing the `enum`s by global constants.
+## Requirements
 
-### Examples
+- Python 3.7+
+- `turtle` module (included in standard Python library)
 
-Draw all the paths going through all the vectors as well as the shortest one (each vector represents a position and an angle, its length does not represent anything).
+## Usage
 
-```
-$ python3 demo.py
-```
-
-![Reeds-Shepp curves implementation example](demo.gif)
-
-Another example without drawing:
-
-```python
-import reeds_shepp as rs
-import utils
-import math
-
-# a list of "vectors" (x, y, angle in degrees)
-ROUTE = [(-2,4,180), (2,4,0), (2,-3,90), (-5,-6,240), (-6, -7, 160), (-7,-1,80)]
-
-full_path = []
-total_length = 0
-
-for i in range(len(ROUTE) - 1):
-    path = rs.get_optimal_path(ROUTE[i], ROUTE[i+1])
-    full_path += path
-    total_length += rs.path_length(path)
-
-print("Shortest path length: {}".format(round(total_length, 2)))
-
-for e in full_path:
-    print(e) 
-    # e.steering (LEFT/RIGHT/STRAIGHT), e.gear (FORWARD/BACKWARD), e.param (distance)
-```
-
-Output:
+1. Create a waypoint file (or use the example one generated automatically):
 
 ```
-Shortest path length: 29.53
-
-{ Steering: straight    Gear: backward  distance: 2.0 }
-{ Steering: left        Gear: backward  distance: 1.57 }
-{ Steering: right       Gear: forward   distance: 1.57 }
-{ Steering: left        Gear: forward   distance: 0.13 }
-{ Steering: right       Gear: backward  distance: 1.57 }
-{ Steering: straight    Gear: backward  distance: 5.81 }
-{ Steering: left        Gear: backward  distance: 0.13 }
-{ Steering: right       Gear: backward  distance: 0.46 }
-{ Steering: left        Gear: forward   distance: 1.57 }
-{ Steering: straight    Gear: forward   distance: 5.95 }
-{ Steering: left        Gear: forward   distance: 0.59 }
-{ Steering: left        Gear: forward   distance: 0.25 }
-{ Steering: right       Gear: forward   distance: 1.44 }
-{ Steering: left        Gear: backward  distance: 0.21 }
-{ Steering: right       Gear: forward   distance: 1.15 }
-{ Steering: straight    Gear: forward   distance: 4.9 }
-{ Steering: right       Gear: forward   distance: 0.25 }
+# Format: x,y,theta_degrees
+-6,-7,0
+-6,0,90
+-4,6,45
+0,5,30
+0,-2,-45
+-2,-6,-90
 ```
+
+2. Run the optimizer:
+
+```
+$ python optimize.py
+```
+
+3. The script will:
+   - Determine optimal waypoint order using TSP
+   - Draw waypoints and vectors indicating positions
+   - Visualize paths with different turning radii (0.5, 1.0, 2.0, 3.0 by default)
+   - Display the total path length for each radius
+
+## Example Output
+
+The visualization shows:
+- Black arrows representing waypoints with their orientation
+- Colored paths representing trajectories with different turning radii
+- A legend indicating which color corresponds to which turning radius value
+
+## Technical Approach
+
+The implementation combines:
+
+1. **Reeds-Shepp Curves**: Optimal paths for a car that can move both forward and backward
+2. **TSP Solver**: Finds the best order to visit all waypoints
+   - For small sets: Uses exact solution through permutation analysis
+   - For larger sets: Uses greedy nearest-neighbor heuristic
+3. **Radius Scaling**: Properly scales coordinates and distances based on the turning radius
+4. **Turtle Graphics**: Visualizes the resulting paths with animation
+
+## Original Reeds-Shepp Implementation
+
+This project makes use of the Python implementation of Reeds-Shepp from:
+
+https://github.com/nathanlct/reeds-shepp-curves
+
+
+## Contributors
+- **Matei-Alexandru Podeanu** ([contact](mailto:matei-alexandru.podeanu@s.unibuc.ro))
+- **Robert Eduard Schmidt** ([contact](mailto:robert-eduard.schmidt@s.unibuc.ro))
